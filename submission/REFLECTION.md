@@ -198,4 +198,4 @@ Q2 nhỏ hơn khoảng 24,6% nhưng chỉ tăng decode khoảng 3,75%. Với ser
 
 ## 9. Khai báo sử dụng AI
 
-Dùng Codex để đọc yêu cầu, lập kế hoạch, hướng dẫn lệnh chạy, đọc log và hỗ trợ soạn các report được yêu cầu từ số liệu thực tế. Tôi tự chạy các phép đo trên máy local. Code lab hiện có được giữ nguyên. Các diễn giải cơ chế chưa có profiling được ghi là giả thuyết, và tôi cần đọc lại để xác nhận hiểu trước khi nộp.
+Dùng Codex để đọc yêu cầu, lập kế hoạch, hướng dẫn lệnh chạy, đọc log. Tôi tự chạy các phép đo trên máy local. Code lab hiện có được giữ nguyên. Các diễn giải cơ chế chưa có profiling được ghi là giả thuyết, và tôi cần đọc lại để xác nhận hiểu trước khi nộp.
