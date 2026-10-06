@@ -1,0 +1,60 @@
+
+────────────────────────────────────────────────────────────────
+  primary  (UD-Q4_K_XL)
+────────────────────────────────────────────────────────────────
+  model     : gemma-4-E2B-it-UD-Q4_K_XL.gguf
+  threads   : 12   ngl: 99   ctx: 2048   max_tokens: 64
+  starting llama-server ...
+  ready in 3075 ms (model load + warm-up of the HTTP stack)
+   [ 1/10] ttft=  219.7ms  tpot= 12.3ms  e2e=   995.8ms  out=64
+   [ 2/10] ttft=   84.0ms  tpot= 12.5ms  e2e=   296.8ms  out=18
+   [ 3/10] ttft=   84.1ms  tpot= 12.5ms  e2e=   871.6ms  out=64
+   [ 4/10] ttft=   84.9ms  tpot= 12.5ms  e2e=   872.8ms  out=64
+   [ 5/10] ttft=   84.2ms  tpot= 12.4ms  e2e=   863.5ms  out=64
+   [ 6/10] ttft=   83.4ms  tpot= 12.3ms  e2e=   860.4ms  out=64
+   [ 7/10] ttft=   82.0ms  tpot= 12.4ms  e2e=   860.9ms  out=64
+   [ 8/10] ttft=   82.7ms  tpot= 13.0ms  e2e=   899.9ms  out=64
+   [ 9/10] ttft=   81.9ms  tpot= 13.0ms  e2e=   576.9ms  out=39
+   [10/10] ttft=   81.3ms  tpot= 12.8ms  e2e=   885.9ms  out=64
+
+────────────────────────────────────────────────────────────────
+  compare  (UD-Q2_K_XL)
+────────────────────────────────────────────────────────────────
+  model     : gemma-4-E2B-it-UD-Q2_K_XL.gguf
+  threads   : 12   ngl: 99   ctx: 2048   max_tokens: 64
+  starting llama-server ...
+  ready in 2017 ms (model load + warm-up of the HTTP stack)
+   [ 1/10] ttft=  275.1ms  tpot= 12.3ms  e2e=   854.1ms  out=48
+   [ 2/10] ttft=   81.7ms  tpot= 12.3ms  e2e=   290.1ms  out=18
+   [ 3/10] ttft=   80.0ms  tpot= 11.8ms  e2e=   822.7ms  out=64
+   [ 4/10] ttft=   82.6ms  tpot= 12.0ms  e2e=   841.3ms  out=64
+   [ 5/10] ttft=   82.0ms  tpot= 11.9ms  e2e=   829.9ms  out=64
+   [ 6/10] ttft=   79.8ms  tpot= 12.8ms  e2e=   887.7ms  out=64
+   [ 7/10] ttft=   79.5ms  tpot= 12.4ms  e2e=   861.9ms  out=64
+   [ 8/10] ttft=   81.6ms  tpot= 12.0ms  e2e=   835.1ms  out=64
+   [ 9/10] ttft=   80.8ms  tpot= 12.3ms  e2e=   621.3ms  out=45
+   [10/10] ttft=   79.6ms  tpot= 11.8ms  e2e=   820.9ms  out=64
+
+# 01 - Measure: latency baseline
+
+Model `Gemma 4 E2B` · host `Darwin-arm64` · llama.cpp `b10488`
+Settings: `threads=12` `ngl=99` `ctx=2048`
+`max_tokens=64` · warm-up discarded
+Completed requests: `UD-Q4_K_XL` 10/10 · `UD-Q2_K_XL` 10/10
+
+| Quantization | Size (GB) | Load (ms) | TTFT P50/P95 (ms) | TPOT P50/P95 (ms) | E2E P50/P95/P99 (ms) | Decode (tok/s) |
+|:--|--:|--:|--:|--:|--:|--:|
+| UD-Q4_K_XL | 2.97 | 3075 | 83 / 220 | 12.5 / 13.0 | 864 / 996 / 996 | 80.0 |
+| UD-Q2_K_XL | 2.24 | 2017 | 81 / 275 | 12.0 / 12.8 | 830 / 888 / 888 | 83.0 |
+
+- **TTFT** = prefill. Short prompts keep it small; long-context RAG is where it explodes.
+- **TPOT** = per-output-token decode cost, bounded by memory bandwidth. `decode tok/s = 1000 / TPOT_p50`.
+- `UD-Q2_K_XL` decodes **1.04x faster** than `UD-Q4_K_XL` here, for 0.73 GB less on disk.
+
+## Your observation (required -- replace this line)
+
+_Is the smaller quantization worth it on your machine? Compare the numbers above,
+then judge the answer quality yourself: run `make serve` on each and ask the same
+question twice. Size and speed are measurable; usefulness is your call._
+
+==> Wrote benchmarks/01-quickstart-results.md

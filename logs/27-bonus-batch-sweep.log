@@ -1,0 +1,42 @@
+
+────────────────────────────────────────────────────────────────
+  Batch-size sweep on gemma-4-E2B-it-UD-Q4_K_XL.gguf
+────────────────────────────────────────────────────────────────
+  metric pp512 · threads 6 · ngl 99
+
+   -b  128  -ub  128   pp512 =   1128.8 tok/s
+   -b  256  -ub  256   pp512 =   1171.0 tok/s
+   -b  512  -ub  256   pp512 =   1167.0 tok/s
+   -b  512  -ub  512   pp512 =   1212.7 tok/s
+   -b 1024  -ub  512   pp512 =   1202.5 tok/s
+   -b 2048  -ub  512   pp512 =   1201.5 tok/s
+
+# Bonus - Batch-size sweep (chunked prefill)
+
+Host `Darwin-arm64` · llama.cpp `b10488` ·
+`threads=6` `ngl=99` · metric `pp512`
+
+| -b (logical) | -ub (micro) | pp512 (tok/s) | vs best |
+|:--|--:|--:|--:|
+| 128 | 128 | 1128.8 | 93% |
+| 256 | 256 | 1171.0 | 97% |
+| 512 | 256 | 1167.0 | 96% |
+| 512 | 512 | 1212.7 | 100% |
+| 1024 | 512 | 1202.5 | 99% |
+| 2048 | 512 | 1201.5 | 99% |
+
+Best: `-b 512 -ub 512` at 1212.7 tok/s
+(1.07x the slowest point tested).
+
+This sweep only measures the throughput half of the trade. The cost it hides is
+TTFT for queued requests: a larger micro-batch holds the device longer per step,
+so anything waiting behind it waits longer. To see both halves, re-run
+`make load-50` with your best and worst settings via
+`.venv/bin/python labs/02-serve/serve.py -- -b N -ub M` and compare P95.
+
+## Your finding (required -- replace this line)
+
+_Which setting would you run in production, and what would you need to measure to
+be sure it does not hurt the P95 of a contended server?_
+
+==> Wrote benchmarks/bonus-batch-size-sweep.md

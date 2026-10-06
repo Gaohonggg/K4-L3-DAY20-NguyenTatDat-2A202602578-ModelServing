@@ -1,0 +1,30 @@
+==> Verifying submission readiness in /Users/nguyendat/Documents/VIN/LAB/K4-L3-DAY20-NguyenTatDat-2A202602578-ModelServing
+
+Setup (00)
+  ✓ Hardware probe: hardware.json
+  ✓ Model manifest: Gemma 4 E2B (UD-Q4_K_XL + UD-Q2_K_XL)
+  ✓ Runtime: llama-server present (b10488)
+
+Measure (01)
+  ✓ Latency baseline: benchmarks/01-quickstart-results.md
+  ✓ Tuning sweep: benchmarks/01-tuning-tg128.md
+
+Serve (02)
+  ✓ Load run at 10 users: benchmarks/locust-10_stats.csv
+  ✓ Load run at 50 users: benchmarks/locust-50_stats.csv
+  ✓ Saturation reading: benchmarks/02-server-results.md
+  ✓ Continuous-batching evidence: benchmarks/02-server-batching-u50.md, benchmarks/02-server-metrics-u50.csv
+
+Integrate (03)
+  ✓ RAG pipeline run: benchmarks/03-integration-results.md
+
+Submission
+  ✓ Reflection: submission/REFLECTION.md filled in (2252 words)
+  ✓ Screenshots: 7 image(s)
+
+✓ All checks passed.
+
+  Note: this checks that the files exist. It cannot check that your numbers agree
+  with each other -- re-read benchmarks/*.md against REFLECTION.md before pushing.
+
+  Next: commit, push to a PUBLIC GitHub repo, paste the URL into the LMS.

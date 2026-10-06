@@ -1,0 +1,30 @@
+
+────────────────────────────────────────────────────────────────
+  03 - RAG pipeline
+────────────────────────────────────────────────────────────────
+  llama-server : http://localhost:8080
+  embeddings   : none (keyword overlap fallback)
+
+=== Why is goodput more useful than raw throughput?
+  contexts : [('goodput', 1.0), ('paged', 0.0), ('radix', 0.0)]
+  timings  : {'embed': 0.0, 'retrieve': 0.0, 'llm': 610.4, 'total': 610.4}
+  server   : prefill 150 tok / 226 ms, decode 30 tok / 345 ms
+  answer   : Goodput@SLO counts only the requests per second that met the TTFT and TPOT targets. Throughput at saturation ignores SLOs.
+
+=== What problem does PagedAttention actually solve?
+  contexts : [('paged', 1.0), ('radix', 0.0), ('disagg', 0.0)]
+  timings  : {'embed': 0.0, 'retrieve': 0.0, 'llm': 419.8, 'total': 419.9}
+  server   : prefill 114 tok / 154 ms, decode 23 tok / 260 ms
+  answer   : PagedAttention stores the KV cache in non-contiguous pages, removing the internal fragmentation that wasted most GPU memory.
+
+=== When does splitting prefill and decode help?
+  contexts : [('disagg', 2.0), ('radix', 1.0), ('batching', 1.0)]
+  timings  : {'embed': 0.0, 'retrieve': 0.0, 'llm': 437.0, 'total': 437.1}
+  server   : prefill 113 tok / 152 ms, decode 24 tok / 279 ms
+  answer   : Splitting prefill and decode helps because prefill is compute-bound and decode is memory-bandwidth-bound.
+
+  Mean over 3 queries (ms): {'embed': 0.0, 'retrieve': 0.0, 'llm': 489.1, 'total': 489.1}
+  Dominant stage: llm (100% of total)
+
+==> Wrote benchmarks/03-integration-results.md
+  Put these numbers in REFLECTION.md section 4 as well.
